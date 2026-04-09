@@ -1,18 +1,22 @@
-let tasks = [];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 function addTask() {
   let input = document.getElementById("taskInput");
-  let taskText = input.value;
+  let taskText = input.value.trim();
 
   if (taskText === "") return;
 
-  let task = {
+  tasks.push({
     text: taskText,
     completed: false
-  };
+  });
 
-  tasks.push(task);
   input.value = "";
+  saveTasks();
   displayTasks();
 }
 
@@ -22,12 +26,13 @@ function displayTasks() {
 
   tasks.forEach((task, index) => {
     let li = document.createElement("li");
+    li.className = "task-item";
 
     li.innerHTML = `
-      <span onclick="toggleTask(${index})" class="${task.completed ? 'completed' : ''}">
+      <span onclick="toggleTask(${index})" class="task-text ${task.completed ? 'completed' : ''}">
         ${task.text}
       </span>
-      <button onclick="deleteTask(${index})">Delete</button>
+      <button class="delete-btn" onclick="deleteTask(${index})">✕</button>
     `;
 
     list.appendChild(li);
@@ -38,10 +43,15 @@ function displayTasks() {
 
 function toggleTask(index) {
   tasks[index].completed = !tasks[index].completed;
+  saveTasks();
   displayTasks();
 }
 
 function deleteTask(index) {
   tasks.splice(index, 1);
+  saveTasks();
   displayTasks();
 }
+
+// Load tasks on page load
+displayTasks();
