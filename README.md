@@ -37,3 +37,9 @@ The application allows users to:
 ---
 
 ## 📂 Project Structure
+
+todo-app/
+│── index.html
+│── style.css
+│── script.js
+│── README.md
